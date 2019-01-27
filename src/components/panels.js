@@ -17,16 +17,13 @@ const styles = theme => ({
 });
 
 const Panels = props => {
-  const {classes} = props;
-  console.log("Panels", props.exerciseGroups);
-
+  const {exerciseGroups, classes} = props;
 
   return (
     <Grid container className={classes.main}>
       <Grid item xs>
         <Paper className={classes.paper}>
-          {JSON.stringify(props.exerciseGroups)}
-          {props.exerciseGroups.map((group, index)=>
+          {exerciseGroups.map(([group], index)=>
             <Typography
               key={index}
               variant="headline"
