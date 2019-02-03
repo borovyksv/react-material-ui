@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Header from "./header";
+import Header from "./layouts/header";
 import Panels from "./panels";
 import Tabs from "./tabs";
 import {exercises, getExerciseByMuscles, muscles} from "../store";
