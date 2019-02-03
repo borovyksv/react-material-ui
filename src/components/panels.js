@@ -48,7 +48,7 @@ const Panels = props => {
                 >
                   {group}
                 </Typography>
-                <List component="nav">
+                <List disablePadding>
                   {exercises.map(({id, title}) =>
                     <ListItem key={id} button>
                       <ListItemText primary={title} onClick={() => onSelect(id)}/>
