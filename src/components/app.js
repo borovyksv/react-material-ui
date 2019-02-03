@@ -2,42 +2,41 @@ import React, {Component} from "react";
 import Header from "./header";
 import Panels from "./panels";
 import Tabs from "./tabs";
-import {exercises} from "../store";
+import {exercises, getExerciseByMuscles, muscles} from "../store";
 
 export default class extends Component {
 
   state = {
     exercises,
-    exerciseByMuscles: []
+    exercise: {},
+    category: '',
+    exerciseByMuscles: [],
   }
 
-  getExerciseByMuscles = () => {
-    return Object.entries(this.state.exercises.reduce((acc, next) => {
-      console.log('acc', acc)
-      const {muscle} = next
-      acc[muscle] = acc[muscle]
-        ? [...acc[muscle], next]
-        : [next]
-      return acc
-    }, {}))
-  }
-
+  handleCategorySelect = category => this.setState({category})
+  handleExerciseSelect = id => this.setState(({exercises}) => ({
+    exercise: exercises.find(ex => ex.id === id)
+  }));
 
   componentDidMount () {
-    const exerciseByMuscles = this.getExerciseByMuscles();
-    console.log(exerciseByMuscles);
+    const exerciseByMuscles = getExerciseByMuscles();
     this.setState({exerciseByMuscles})
   }
-
 
   render(){
     return (
       <div className="App">
         <Header/>
         <Panels
-          text={"TEXTTTTTT"}
+          exercise={this.state.exercise}
+          category={this.state.category}
+          onSelect={this.handleExerciseSelect}
           exerciseGroups={this.state.exerciseByMuscles}/>
-        <Tabs/>
+        <Tabs
+          handleCategorySelect={this.handleCategorySelect}
+          category={this.state.category}
+          muscles={muscles}
+        />
       </div>
     );
   }

@@ -22,7 +22,7 @@ export const exercises = [
     muscle: 'arms'
   },
   {
-    'id': 'bench-press',
+    id: 'bench-press',
     title: 'Bench Press',
     description: 'Chest exercise...',
     muscle: 'chest'
@@ -47,3 +47,12 @@ export const exercises = [
   },
 ]
 
+export const getExerciseByMuscles = () => {
+  return Object.entries(exercises.reduce((acc, next) => {
+    const {muscle} = next
+    acc[muscle] = acc[muscle]
+      ? [...acc[muscle], next]
+      : [next]
+    return acc
+  }, {}))
+}
