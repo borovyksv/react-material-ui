@@ -1,5 +1,5 @@
-import {exercises, getExerciseByMuscles, muscles} from "../db";
-import {SELECT_CATEGORY, SELECT_EXERCISE} from "../types";
+import {exercises, getExerciseByMuscles, muscles} from "../store";
+import * as types from "../types";
 
 const initialState = {
   exercises,
@@ -11,10 +11,10 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SELECT_CATEGORY:
+    case types.SELECT_CATEGORY:
       console.log(action);
       return {...state, category: action.category}
-    case SELECT_EXERCISE:
+    case types.SELECT_EXERCISE:
       return {...state, exercise: action.exercise}
     default:
       return state;
