@@ -10,38 +10,55 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from "@material-ui/core/Fab/Fab";
 
 export default class AddExerciseDialog extends Component {
-    state = { open: false };
-
-    handleClick = () => this.setState({ open: !this.state.open });
-
-    render() {
-        return (
-            <div>
-                <Fab size="small" color="default" onClick={this.handleClick}>
-                  <AddIcon/>
-                </Fab>
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClick}
-                >
-                    <DialogTitle>Add exercise</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Please input exercise details below
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            fullWidth
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" color="primary">
-                            Create
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
+  state = {
+    open: true,
+    form: {
+      title: '',
+      description: '',
+      muscle: '',
     }
+  };
+
+  handleClick = () => this.setState({open: !this.state.open});
+
+  handleChange = name => event => this.setState({
+    form: {
+      ...this.state.form,
+      [name]: event.target.value
+    }
+  });
+
+  render() {
+    const {form} = this.state;
+    return (
+      <div>
+        <Fab size="small" color="default" onClick={this.handleClick}>
+          <AddIcon/>
+        </Fab>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClick}
+        >
+          <DialogTitle>Add exercise</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please input exercise details below
+            </DialogContentText>
+            <TextField
+              autoFocus
+              label="Title"
+              value={form.title}
+              onChange={this.handleChange('title')}
+              margin="normal"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="primary">
+              Create
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }
