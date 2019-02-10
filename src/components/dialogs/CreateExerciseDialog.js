@@ -10,13 +10,21 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from "@material-ui/core/Fab/Fab";
 import Grid from "@material-ui/core/Grid/Grid";
 import {withStyles} from "@material-ui/core";
+import Select from "@material-ui/core/Select/Select";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import connect from "react-redux/es/connect/connect";
+import {selectExercise} from "../../actions";
+import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Divider from "@material-ui/core/Divider/Divider";
 
-const styles = theme => ({
-  textCenter: { textAlign: 'center' }
+const styles = () => ({
+  textCenter: {textAlign: 'center'}
 });
 
 
-class AddExerciseDialog extends Component {
+class CreateExerciseDialog extends Component {
   state = {
     open: true,
     form: {
@@ -36,7 +44,7 @@ class AddExerciseDialog extends Component {
   });
 
   render() {
-    const {classes} = this.props;
+    const {classes, muscles: categories} = this.props;
     const {form} = this.state;
     return (
       <Grid container justify="center" alignItems="center">
@@ -53,6 +61,20 @@ class AddExerciseDialog extends Component {
               Please input exercise details below
             </DialogContentText>
             <TextField
+              select
+              fullWidth
+              variant="outlined"
+              label="Muscle category"
+              value={form.muscle}
+              onChange={this.handleChange('muscle')}
+            >
+              {categories.map(category =>
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              )}
+            </TextField>
+            <TextField
               fullWidth
               autoFocus
               label="Title"
@@ -62,18 +84,11 @@ class AddExerciseDialog extends Component {
             />
             <TextField
               fullWidth
-              autoFocus
+              multiline
+              rows={4}
               label="Description"
               value={form.description}
               onChange={this.handleChange('description')}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              autoFocus
-              label="Muscle"
-              value={form.muscle}
-              onChange={this.handleChange('muscle')}
               margin="normal"
             />
           </DialogContent>
@@ -88,4 +103,7 @@ class AddExerciseDialog extends Component {
   }
 }
 
-export default withStyles(styles)(AddExerciseDialog)
+const mapStateToProps = state => ({
+  muscles: state.muscles,
+})
+export default connect(mapStateToProps, {selectExercise})(withStyles(styles)(CreateExerciseDialog))

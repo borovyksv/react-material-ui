@@ -1,5 +1,5 @@
 import {AppBar, Toolbar, Typography} from "@material-ui/core";
-import AddExerciseDialog from "../dialogs/AddExerciseDialog";
+import CreateExerciseDialog from "../dialogs/CreateExerciseDialog";
 import React from 'react';
 import Grid from "@material-ui/core/Grid/Grid";
 
@@ -13,7 +13,7 @@ export default () => {
           </Grid>
           <Grid item>
             <Grid container>
-              <AddExerciseDialog/>
+              <CreateExerciseDialog/>
             </Grid>
           </Grid>
         </Grid>
