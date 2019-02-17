@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import Fab from "@material-ui/core/Fab/Fab";
 import Grid from "@material-ui/core/Grid/Grid";
 import {withStyles} from "@material-ui/core";
@@ -19,7 +20,7 @@ const styles = () => ({
 });
 
 
-class CreateExerciseDialog extends Component {
+class SaveExerciseDialog extends Component {
 
   defaultState = {
     open: false,
@@ -31,6 +32,13 @@ class CreateExerciseDialog extends Component {
   }
 
   state = this.defaultState;
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.exercise && prevState.form.title==='') {
+      return {...prevState, form: nextProps.exercise}
+    }
+    return null
+  }
 
   handleClick = () => this.setState({open: !this.state.open})
 
@@ -48,18 +56,19 @@ class CreateExerciseDialog extends Component {
   }
 
   render() {
-    const {classes, muscles: categories} = this.props
+    const {classes, muscles: categories, exercise} = this.props
     const {form} = this.state
     return (
       <Grid container justify="center" alignItems="center">
-        <Fab size="small" color="default" onClick={this.handleClick}>
-          <AddIcon/>
-        </Fab>
+        {exercise
+          ? <EditIcon onClick={this.handleClick}/>
+          : <Fab size="small" color="default" onClick={this.handleClick}><AddIcon/></Fab>
+        }
         <Dialog
           open={this.state.open}
           onClose={this.handleClick}
         >
-          <DialogTitle className={classes.textCenter}>Add exercise</DialogTitle>
+          <DialogTitle className={classes.textCenter}>{exercise ? 'Edit' : 'Add'} exercise</DialogTitle>
           <DialogContent className={classes.textCenter}>
             <DialogContentText>
               Please input exercise details below
@@ -102,7 +111,7 @@ class CreateExerciseDialog extends Component {
               color="primary"
               onClick={this.handleSubmit}
             >
-              Create
+              Save
             </Button>
           </DialogActions>
         </Dialog>
@@ -114,4 +123,4 @@ class CreateExerciseDialog extends Component {
 const mapStateToProps = state => ({
   muscles: state.muscles,
 })
-export default connect(mapStateToProps, {selectExercise, saveExercise})(withStyles(styles)(CreateExerciseDialog))
+export default connect(mapStateToProps, {selectExercise, saveExercise})(withStyles(styles)(SaveExerciseDialog))

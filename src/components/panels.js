@@ -6,11 +6,11 @@ import List from "@material-ui/core/List/List";
 import ListItem from "@material-ui/core/ListItem/ListItem";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import {connect} from "react-redux";
-import {editExercise, deleteExercise, selectExercise} from "../actions";
+import {deleteExercise, selectExercise} from "../actions";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import Delete from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
+import CreateExerciseDialog from "./dialogs/CreateExerciseDialog";
 
 const styles = theme => ({
   paper: {
@@ -31,6 +31,7 @@ const styles = theme => ({
 class Panels extends Component {
 
   handleClick = id => {
+    console.log("handleClick, id: ", id);
     let exercise = this.props.exercises.find(ex => ex.id === id);
     this.props.selectExercise(exercise)
   }
@@ -45,7 +46,6 @@ class Panels extends Component {
         description = 'Please select an exercise from the list on the left'
       },
       deleteExercise,
-      editExercise
     } = this.props;
     return (
       <Grid container className={classes.main}>
@@ -62,14 +62,14 @@ class Panels extends Component {
                     {group}
                   </Typography>
                   <List disablePadding>
-                    {exercises.map(({id, title}) =>
-                      <ListItem key={id} button>
-                        <ListItemText primary={title} onClick={() => this.handleClick(id)}/>
+                    {exercises.map((exercise) =>
+                      <ListItem key={exercise.id} button>
+                        <ListItemText primary={exercise.title} onClick={() => this.handleClick(exercise.id)}/>
                         <ListItemSecondaryAction>
-                          <IconButton onClick={() => editExercise(id)}>
-                            <Edit/>
+                          <IconButton>
+                            <CreateExerciseDialog exercise={exercise}/>
                           </IconButton>
-                          <IconButton onClick={() => deleteExercise(id)}>
+                          <IconButton onClick={() => deleteExercise(exercise.id)}>
                             <Delete/>
                           </IconButton>
                         </ListItemSecondaryAction>
@@ -103,4 +103,4 @@ const mapStateToProps = state => ({
   exercise: state.exercise,
   category: state.category,
 })
-export default connect(mapStateToProps, {selectExercise, deleteExercise, editExercise})(withStyles(styles)(Panels))
+export default connect(mapStateToProps, {selectExercise, deleteExercise})(withStyles(styles)(Panels))

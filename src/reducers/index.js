@@ -1,6 +1,5 @@
 import {exercises, getExerciseByMuscles, muscles} from "../store";
 import * as types from "../types";
-import {EDIT_EXERCISE} from "../types";
 
 const initialState = {
   exercises,
@@ -18,20 +17,18 @@ export default (state = initialState, action) => {
     case types.SELECT_EXERCISE:
       return {...state, exercise: action.exercise}
     case types.SAVE_EXERCISE: {
-      const newExercises = [...exercises, action.exercise]
+      const {exercise} = action
+      exercise.id = exercise.id || exercise.title
+      const newExercises = state.exercises.find(e=>e.id===exercise.id)
+        ? state.exercises.map(e=>e.id===exercise.id ? exercise : e)
+        : [...state.exercises, action.exercise]
       return {
         ...state,
+        exercise,
         exercises: newExercises,
         exerciseGroups: getExerciseByMuscles(newExercises),
       }}
     case types.DELETE_EXERCISE: {
-      const newExercises = state.exercises.filter(e => e.id !== action.id)
-      return {
-        ...state,
-        exercises: newExercises,
-        exerciseGroups: getExerciseByMuscles(newExercises),
-      }}
-    case types.EDIT_EXERCISE: {
       const newExercises = state.exercises.filter(e => e.id !== action.id)
       return {
         ...state,
