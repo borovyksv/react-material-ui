@@ -32,6 +32,7 @@ export default (state = initialState, action) => {
       const newExercises = state.exercises.filter(e => e.id !== action.id)
       return {
         ...state,
+        exercise: initialState.exercise,
         exercises: newExercises,
         exerciseGroups: getExerciseByMuscles(newExercises),
       }}

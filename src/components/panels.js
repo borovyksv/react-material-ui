@@ -26,9 +26,24 @@ const styles = theme => ({
   capital: {
     textTransform: 'capitalize'
   },
+  action: {
+    '.hide': {visibility: 'hidden'},
+    ':hover .hide': {visibility: 'visible'}
+  }
 });
 
 class Panels extends Component {
+  state = {
+    showId: null,
+  };
+
+  handleMouseEnter = id => {
+    this.setState({showId: id});
+  };
+
+  handleMouseLeave = () => {
+    this.setState({showId: null});
+  };
 
   handleClick = id => {
     console.log("handleClick, id: ", id);
@@ -37,6 +52,7 @@ class Panels extends Component {
   }
 
   render() {
+    const {showId} = this.state
     const {
       exerciseGroups,
       classes,
@@ -61,18 +77,20 @@ class Panels extends Component {
                   >
                     {group}
                   </Typography>
-                  <List disablePadding>
+                  <List disablePadding onMouseLeave={this.handleMouseLeave}>
                     {exercises.map((exercise) =>
-                      <ListItem key={exercise.id} button>
+                      <ListItem key={exercise.id} button
+                                onMouseEnter={() => this.handleMouseEnter(exercise.id)}
+                                >
                         <ListItemText primary={exercise.title} onClick={() => this.handleClick(exercise.id)}/>
-                        <ListItemSecondaryAction>
+                        {showId === exercise.id && <ListItemSecondaryAction>
                           <IconButton>
                             <CreateExerciseDialog exercise={exercise}/>
                           </IconButton>
                           <IconButton onClick={() => deleteExercise(exercise.id)}>
                             <Delete/>
                           </IconButton>
-                        </ListItemSecondaryAction>
+                        </ListItemSecondaryAction>}
                       </ListItem>
                     )}
                   </List>
