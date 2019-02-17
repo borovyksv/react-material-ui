@@ -6,7 +6,11 @@ import List from "@material-ui/core/List/List";
 import ListItem from "@material-ui/core/ListItem/ListItem";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import {connect} from "react-redux";
-import {selectExercise} from "../actions";
+import {editExercise, deleteExercise, selectExercise} from "../actions";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
 
 const styles = theme => ({
   paper: {
@@ -27,7 +31,7 @@ const styles = theme => ({
 class Panels extends Component {
 
   handleClick = id => {
-    let exercise= this.props.exercises.find(ex => ex.id === id);
+    let exercise = this.props.exercises.find(ex => ex.id === id);
     this.props.selectExercise(exercise)
   }
 
@@ -40,6 +44,8 @@ class Panels extends Component {
         title = 'Welcome',
         description = 'Please select an exercise from the list on the left'
       },
+      deleteExercise,
+      editExercise
     } = this.props;
     return (
       <Grid container className={classes.main}>
@@ -58,7 +64,15 @@ class Panels extends Component {
                   <List disablePadding>
                     {exercises.map(({id, title}) =>
                       <ListItem key={id} button>
-                        <ListItemText primary={title} onClick={()=>this.handleClick(id)}/>
+                        <ListItemText primary={title} onClick={() => this.handleClick(id)}/>
+                        <ListItemSecondaryAction>
+                          <IconButton onClick={() => editExercise(id)}>
+                            <Edit/>
+                          </IconButton>
+                          <IconButton onClick={() => deleteExercise(id)}>
+                            <Delete/>
+                          </IconButton>
+                        </ListItemSecondaryAction>
                       </ListItem>
                     )}
                   </List>
@@ -89,4 +103,4 @@ const mapStateToProps = state => ({
   exercise: state.exercise,
   category: state.category,
 })
-export default connect(mapStateToProps, {selectExercise})(withStyles(styles)(Panels))
+export default connect(mapStateToProps, {selectExercise, deleteExercise, editExercise})(withStyles(styles)(Panels))

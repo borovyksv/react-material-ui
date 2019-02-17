@@ -47,7 +47,7 @@ export const exercises = [
   },
 ]
 
-export const getExerciseByMuscles = () => {
+export const getExerciseByMuscles = exercises => {
   return Object.entries(exercises.reduce((acc, next) => {
     const {muscle} = next
     acc[muscle] = acc[muscle]

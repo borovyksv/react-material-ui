@@ -10,14 +10,9 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from "@material-ui/core/Fab/Fab";
 import Grid from "@material-ui/core/Grid/Grid";
 import {withStyles} from "@material-ui/core";
-import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import connect from "react-redux/es/connect/connect";
-import {selectExercise} from "../../actions";
-import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Divider from "@material-ui/core/Divider/Divider";
+import {saveExercise, selectExercise} from "../../actions";
 
 const styles = () => ({
   textCenter: {textAlign: 'center'}
@@ -25,27 +20,36 @@ const styles = () => ({
 
 
 class CreateExerciseDialog extends Component {
-  state = {
-    open: true,
+
+  defaultState = {
+    open: false,
     form: {
       title: '',
       description: '',
       muscle: '',
     }
-  };
+  }
 
-  handleClick = () => this.setState({open: !this.state.open});
+  state = this.defaultState;
+
+  handleClick = () => this.setState({open: !this.state.open})
 
   handleChange = name => event => this.setState({
     form: {
       ...this.state.form,
       [name]: event.target.value
     }
-  });
+  })
+
+  handleSubmit = () => {
+    const {form: exercise} = this.state
+    this.props.saveExercise(exercise)
+    this.setState(this.defaultState);
+  }
 
   render() {
-    const {classes, muscles: categories} = this.props;
-    const {form} = this.state;
+    const {classes, muscles: categories} = this.props
+    const {form} = this.state
     return (
       <Grid container justify="center" alignItems="center">
         <Fab size="small" color="default" onClick={this.handleClick}>
@@ -67,6 +71,7 @@ class CreateExerciseDialog extends Component {
               label="Muscle category"
               value={form.muscle}
               onChange={this.handleChange('muscle')}
+              margin="normal"
             >
               {categories.map(category =>
                 <MenuItem key={category} value={category}>
@@ -80,30 +85,33 @@ class CreateExerciseDialog extends Component {
               label="Title"
               value={form.title}
               onChange={this.handleChange('title')}
-              margin="normal"
             />
             <TextField
               fullWidth
               multiline
-              rows={4}
+              rows={2}
               label="Description"
               value={form.description}
               onChange={this.handleChange('description')}
-              margin="normal"
+              margin="dense"
             />
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleSubmit}
+            >
               Create
             </Button>
           </DialogActions>
         </Dialog>
       </Grid>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => ({
   muscles: state.muscles,
 })
-export default connect(mapStateToProps, {selectExercise})(withStyles(styles)(CreateExerciseDialog))
+export default connect(mapStateToProps, {selectExercise, saveExercise})(withStyles(styles)(CreateExerciseDialog))
